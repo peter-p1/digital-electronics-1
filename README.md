@@ -1,6 +1,6 @@
 # digital-electronics-1
 
-# H1
+# Priečinok
 ## H2
 ### H3
 #### H4
