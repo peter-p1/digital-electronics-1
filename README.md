@@ -1,8 +1,8 @@
 # digital-electronics-1
 
 # Priečinok
-## H2
-### H3
+## Ano
+### ~~Nie~~
 #### H4
 ##### H5
 ###### H6
