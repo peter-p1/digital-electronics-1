@@ -47,7 +47,7 @@ begin
 
   hex2seg : entity work.hex_7seg
     port map (
-      blank  => BTNC, -- nalavo su vstupy z cudzieho suboru, napravo su fyzicke vstupy definovane na zaciatku top.vhd
+      blank  => BTNC,
       hex    => SW,
       seg(6) => CA,
       seg(5) => CB,
@@ -61,7 +61,7 @@ begin
     );
 
   -- Connect one common anode to 3.3V
-  AN <= b"1111_0111";
+  AN <= b"1111_1101";
 
   -- Display input value on LEDs
   LED(3 downto 0) <= SW;
