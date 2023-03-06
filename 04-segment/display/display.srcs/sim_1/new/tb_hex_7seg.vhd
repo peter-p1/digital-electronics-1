@@ -1,30 +1,12 @@
-------------------------------------------------------------
---
--- Testbench for 7-segment display decoder.
--- Nexys A7-50T, xc7a50ticsg324-1L
--- TerosHDL, Vivado v2020.2
---
--- Copyright (c) 2020 Tomas Fryza
--- Dept. of Radio Electronics, Brno Univ. of Technology, Czechia
--- This work is licensed under the terms of the MIT license.
---
-------------------------------------------------------------
 
 library ieee;
   use ieee.std_logic_1164.all;
   use ieee.numeric_std.all; -- Definition of "to_unsigned"
 
-------------------------------------------------------------
--- Entity declaration for testbench
-------------------------------------------------------------
-
 entity tb_hex_7seg is
 -- Entity of testbench is always empty
 end entity tb_hex_7seg;
 
-------------------------------------------------------------
--- Architecture body for testbench
-------------------------------------------------------------
 
 architecture testbench of tb_hex_7seg is
 
@@ -35,8 +17,7 @@ architecture testbench of tb_hex_7seg is
 
 begin
 
-  -- Connecting testbench signals with decoder entity
-  -- (Unit Under Test)
+
   uut_hex_7seg : entity work.hex_7seg
     port map (
       blank => sig_blank,
@@ -44,9 +25,7 @@ begin
       seg   => sig_seg
     );
 
-  --------------------------------------------------------
-  -- Data generation process
-  --------------------------------------------------------
+
   p_stimulus : process is
   begin
 
