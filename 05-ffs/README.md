@@ -57,12 +57,12 @@ https://editor.codecogs.com/
    | :-: | :-: | :-: | :-: | :-: | :-- |
    | ![rising](images/eq_uparrow.png) | 0 | 0 | 0 | 0 | Output did not change |
    | ![rising](images/eq_uparrow.png) | 0 | 0 | 1 | 1 | Output did not change |
-   | ![rising](images/eq_uparrow.png) | 0 |  |  |  |  |
-   | ![rising](images/eq_uparrow.png) | 0 |  |  |  |  |
-   | ![rising](images/eq_uparrow.png) | 1 |  |  |  |  |
-   | ![rising](images/eq_uparrow.png) | 1 |  |  |  |  |
-   | ![rising](images/eq_uparrow.png) | 1 |  |  |  |  |
-   | ![rising](images/eq_uparrow.png) | 1 |  |  |  |  |
+   | ![rising](images/eq_uparrow.png) | 0 | 1 | 0 | 0 |  |
+   | ![rising](images/eq_uparrow.png) | 0 | 1 | 1 | 0 |  |
+   | ![rising](images/eq_uparrow.png) | 1 | 0 | 0 | 1 |  |
+   | ![rising](images/eq_uparrow.png) | 1 | 0 | 1 | 1 |  |
+   | ![rising](images/eq_uparrow.png) | 1 | 1 | 0 | 1 |  |
+   | ![rising](images/eq_uparrow.png) | 1 | 1 | 1 | 0 |  |
 
    **T-type FF**
    | **clk** | **t** | **q(n)** | **q(n+1)** | **Comments** |
