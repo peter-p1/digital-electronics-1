@@ -1,4 +1,4 @@
-# Lab 4: PETER PÁNISZ
+# Lab 4: Peter Pánisz
 
 ### LED(7:4) indicators
 
