@@ -85,7 +85,7 @@ begin
       -- FOR IMPLEMENTATION, CALCULATE VALUE: 250 ms / (1/100 MHz)
       -- 1   @ 10 ns
       -- ??? @ 250 ms
-      g_MAX => 1
+      g_MAX => 25000000
     )
     port map (
       clk => clk,
@@ -193,8 +193,25 @@ begin
         west  <= c_RED;
 
       when WEST_GO =>
-        -- WRITE OTHER STATES HERE
-
+        south <= c_RED;
+        west  <= c_GREEN;
+        
+      when WEST_WAIT =>
+        south <= c_RED;
+        west  <= c_YELLOW;
+        
+      when SOUTH_STOP =>
+        south <= c_RED;
+        west  <= c_RED;
+        
+      when SOUTH_GO =>
+        south <= c_GREEN;
+        west  <= c_RED;
+        
+      when SOUTH_WAIT =>
+        south <= c_YELLOW;
+        west  <= c_RED;
+        
 
       when others =>
         south <= c_RED;
