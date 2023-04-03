@@ -33,7 +33,8 @@ entity tlc is
     clk   : in    std_logic;
     rst   : in    std_logic;
     south : out   std_logic_vector(2 downto 0);
-    west  : out   std_logic_vector(2 downto 0)
+    west  : out   std_logic_vector(2 downto 0);
+    speed_button : in std_logic --! Speed button
   );
 end entity tlc;
 
@@ -247,7 +248,7 @@ begin
           end if; -- Speed butoon
       end if; -- Synchronous reset
     end if; -- Rising edge
-  end process p_traffic_fsm;;
+  end process p_traffic_fsm;
 
   --------------------------------------------------------
   -- p_output_fsm:
