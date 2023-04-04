@@ -1,0 +1,7 @@
+https://lucidar.me/en/serialib/most-used-baud-rates-table/
+common baud rates
+
+8-N-1
+one start bit, eight (8) data bits, no (N) parity bit, and one (1) stop bit
+
+https://nandland.com/uart-serial-port-module/
