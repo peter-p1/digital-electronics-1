@@ -30,11 +30,10 @@ library ieee;
 
 entity tlc is
   port (
-    clk   : in    std_logic;
-    rst   : in    std_logic;
-    south : out   std_logic_vector(2 downto 0);
-    west  : out   std_logic_vector(2 downto 0);
-    speed_button : in std_logic --! Speed button
+    clk   : in    std_logic;                    --! Main clock
+    rst   : in    std_logic;                    --! High-active synchronous reset
+    south : out   std_logic_vector(2 downto 0); --! Traffic light for "south" direction
+    west  : out   std_logic_vector(2 downto 0)  --! Traffic light for "west" direction
   );
 end entity tlc;
 
@@ -64,15 +63,14 @@ architecture behavioral of tlc is
   signal sig_cnt : unsigned(4 downto 0);
 
   -- Specific values for local counter
-  constant c_DELAY_4SEC : unsigned(4 downto 0) := b"1_0000";
-  constant c_DELAY_2SEC : unsigned(4 downto 0) := b"0_1000";
-  constant c_DELAY_1SEC : unsigned(4 downto 0) := b"0_0100";
-  constant c_ZERO       : unsigned(4 downto 0) := b"0_0000";
+  constant c_DELAY_4SEC : unsigned(4 downto 0) := b"1_0000"; --! 4-second delay
+  constant c_DELAY_2SEC : unsigned(4 downto 0) := b"0_1000"; --! 2-second delay
+  constant c_DELAY_1SEC : unsigned(4 downto 0) := b"0_0100"; --! 1-second delay
 
   -- Output traffic lights' values
-  constant c_RED    : std_logic_vector(2 downto 0) := b"100";
-  constant c_YELLOW : std_logic_vector(2 downto 0) := b"110";
-  constant c_GREEN  : std_logic_vector(2 downto 0) := b"010";
+  constant c_RED    : std_logic_vector(2 downto 0) := b"100"; --! RGB settings for red color
+  constant c_YELLOW : std_logic_vector(2 downto 0) := b"110"; --! RGB settings for yellow color
+  constant c_GREEN  : std_logic_vector(2 downto 0) := b"010"; --! RGB settings for green color
 
 begin
 
@@ -86,7 +84,6 @@ begin
       -- FOR IMPLEMENTATION, CALCULATE VALUE: 250 ms / (1/100 MHz)
       -- 1   @ 10 ns
       -- ??? @ 250 ms
-      -- g_MAX => 25000000 -- for implementation
       g_MAX => 1
     )
     port map (
@@ -98,10 +95,10 @@ begin
   --------------------------------------------------------
   -- p_traffic_fsm:
   -- A sequential process with synchronous reset and
-  -- clock_enable entirely controls the s_state signal by
-  -- CASE statement.
+  -- clock_enable entirely controls the sig_state signal
+  -- by CASE statement.
   --------------------------------------------------------
-   p_traffic_fsm : process (clk) is
+  p_traffic_fsm : process (clk) is
   begin
 
     if (rising_edge(clk)) then
@@ -112,140 +109,84 @@ begin
         -- Every 250 ms, CASE checks the value of sig_state
         -- local signal and changes to the next state 
         -- according to the delay value.
-        
-        -- Speed button solution
-        if (speed_button = '1') then
-               -- Must be safe switch to west_go
-               
-               case sig_state is
-                when WEST_STOP =>
-                      -- Move to WEST_GO
-                      sig_state <= WEST_GO;
-                      -- Reset delay counter value
-                      sig_cnt   <= (others => '0');
-        
-                  when WEST_GO =>
-                      -- Move to WEST_GO
-                      sig_state <= WEST_GO;
-                      -- Reset delay counter value
-                      sig_cnt   <= (others => '0');
-                    
-                  when WEST_WAIT =>
-                      -- Move to WEST_GO
-                      sig_state <= WEST_GO;
-                      -- Reset delay counter value
-                      sig_cnt   <= (others => '0');
-                    
-                  when SOUTH_STOP =>
-                      -- Move to WEST_GO
-                      sig_state <= WEST_GO;
-                      -- Reset delay counter value
-                      sig_cnt   <= (others => '0');
-                    
-                  when SOUTH_GO =>
-                      -- First move to the yellow state of SOUTH lights
-                      sig_state <= SOUTH_WAIT;
-                      -- Reset delay counter value
-                      sig_cnt   <= (others => '0');
-                    
-                   when SOUTH_WAIT =>
-                    -- Count to 1 secs
-                    if (sig_cnt < c_DELAY_1SEC) then
-                      sig_cnt <= sig_cnt + 1;
-                    else
-                      -- Move to WEST_GO
-                      sig_state <= WEST_GO;
-                      -- Reset delay counter value
-                      sig_cnt   <= (others => '0');
-                    end if;
-        
-                  when others =>
-                    -- It is a good programming practice to use the
-                    -- OTHERS clause, even if all CASE choices have
-                    -- been made.
-                    sig_state <= WEST_STOP;
-                    sig_cnt   <= (others => '0');
-        
-               end case;
-               
-           elsif (speed_button = '0') then
-                case sig_state is
-                
-                  when WEST_STOP =>
-                    -- Count to 2 secs
-                    if (sig_cnt < c_DELAY_2SEC) then
-                      sig_cnt <= sig_cnt + 1;
-                    else
-                      -- Move to the next state
-                      sig_state <= WEST_GO;
-                      -- Reset delay counter value
-                      sig_cnt   <= (others => '0');
-                    end if;
-        
-                  when WEST_GO =>
-                    -- Count to 4 secs
-                    if (sig_cnt < c_DELAY_4SEC) then
-                      sig_cnt <= sig_cnt + 1;
-                    else
-                      -- Move to the next state
-                      sig_state <= WEST_WAIT;
-                      -- Reset delay counter value
-                      sig_cnt   <= (others => '0');
-                    end if;
-                    
-                  when WEST_WAIT =>
-                    -- Count to 1 secs
-                    if (sig_cnt < c_DELAY_1SEC) then
-                      sig_cnt <= sig_cnt + 1;
-                    else
-                      -- Move to the next state
-                      sig_state <= SOUTH_STOP;
-                      -- Reset delay counter value
-                      sig_cnt   <= (others => '0');
-                    end if;
-                    
-                  when SOUTH_STOP =>
-                    -- Count to 2 secs
-                    if (sig_cnt < c_DELAY_2SEC) then
-                      sig_cnt <= sig_cnt + 1;
-                    else
-                      -- Move to the next state
-                      sig_state <= SOUTH_GO;
-                      -- Reset delay counter value
-                      sig_cnt   <= (others => '0');
-                    end if;
-                    
-                  when SOUTH_GO =>
-                    -- Count to 4 secs
-                    if (sig_cnt < c_DELAY_4SEC) then
-                      sig_cnt <= sig_cnt + 1;
-                    else
-                      -- Move to the next state
-                      sig_state <= SOUTH_WAIT;
-                      -- Reset delay counter value
-                      sig_cnt   <= (others => '0');
-                    end if;
-                    
-                   when SOUTH_WAIT =>
-                    -- Count to 1 secs
-                    if (sig_cnt < c_DELAY_1SEC) then
-                      sig_cnt <= sig_cnt + 1;
-                    else
-                      -- Move to the next state
-                      sig_state <= WEST_STOP;
-                      -- Reset delay counter value
-                      sig_cnt   <= (others => '0');
-                    end if;
-        
-                  when others =>
-                    -- It is a good programming practice to use the
-                    -- OTHERS clause, even if all CASE choices have
-                    -- been made.
-                    sig_state <= WEST_STOP;
-                    sig_cnt   <= (others => '0');
-        
-                end case; 
-          end if; -- Speed butoon
+        case sig_state is
+
+          when WEST_STOP =>
+            -- Count to 2 secs
+            if (sig_cnt < c_DELAY_2SEC) then
+              sig_cnt <= sig_cnt + 1;
+            else
+              -- Move to the next state
+              sig_state <= WEST_GO;
+              -- Reset delay counter value
+              sig_cnt   <= (others => '0');
+            end if;
+
+          when WEST_GO =>
+            -- WRITE OTHER STATES HERE
+            -- Count to 4 secs
+            if (sig_cnt < c_DELAY_4SEC) then
+              sig_cnt <= sig_cnt + 1;
+            else
+              -- Move to the next state
+              sig_state <= WEST_WAIT;
+              -- Reset local counter value
+              sig_cnt   <= (others => '0');
+            end if;
+
+            when WEST_WAIT =>
+            -- Count to 1 sec
+            if (sig_cnt < c_DELAY_1SEC) then
+              sig_cnt <= sig_cnt + 1;
+            else
+              -- Move to the next state
+              sig_state <= SOUTH_STOP;
+              -- Reset local counter value
+              sig_cnt   <= (others => '0');
+            end if;
+
+            when SOUTH_STOP =>
+            -- Count to 2 secs
+            if (sig_cnt < c_DELAY_2SEC) then
+              sig_cnt <= sig_cnt + 1;
+            else
+              -- Move to the next state
+              sig_state <= SOUTH_GO;
+              -- Reset local counter value
+              sig_cnt   <= (others => '0');
+            end if;
+
+            when SOUTH_GO =>
+            -- Count to 4 secs
+            if (sig_cnt < c_DELAY_4SEC) then
+              sig_cnt <= sig_cnt + 1;
+            else
+              -- Move to the next state
+              sig_state <= SOUTH_WAIT;
+              -- Reset local counter value
+              sig_cnt   <= (others => '0');
+            end if;
+
+            when SOUTH_WAIT =>
+            -- Count to 1 sec
+            if (sig_cnt < c_DELAY_1SEC) then
+              sig_cnt <= sig_cnt + 1;
+            else
+              -- Move to the next state
+              sig_state <= WEST_STOP;
+              -- Reset local counter value
+              sig_cnt   <= (others => '0');
+            end if;
+
+          when others =>
+            -- It is a good programming practice to use the
+            -- OTHERS clause, even if all CASE choices have
+            -- been made.
+            sig_state <= WEST_STOP;
+            sig_cnt   <= (others => '0');
+
+        end case;
+
       end if; -- Synchronous reset
     end if; -- Rising edge
   end process p_traffic_fsm;
@@ -267,25 +208,25 @@ begin
         west  <= c_RED;
 
       when WEST_GO =>
+        -- WRITE OTHER STATES HERE
         south <= c_RED;
         west  <= c_GREEN;
-        
+
       when WEST_WAIT =>
         south <= c_RED;
         west  <= c_YELLOW;
-        
+
       when SOUTH_STOP =>
         south <= c_RED;
         west  <= c_RED;
-        
+
       when SOUTH_GO =>
         south <= c_GREEN;
         west  <= c_RED;
-        
+
       when SOUTH_WAIT =>
         south <= c_YELLOW;
         west  <= c_RED;
-        
 
       when others =>
         south <= c_RED;
