@@ -16,8 +16,25 @@ architecture Behavioral of uart_tx is
 
     signal count : integer range 0 to BAUD_CLK / BIT_RATE;
     signal tx_reg : std_logic;
+    signal sig_en : std_logic;
+    signal rst :    std_logic;
+    
 
 begin
+
+  clk_en0 : entity work.clock_enable
+    generic map (
+      -- FOR SIMULATION, KEEP THIS VALUE TO 1
+      -- FOR IMPLEMENTATION, CALCULATE VALUE: 250 ms / (1/100 MHz)
+      -- 1   @ 10 ns
+      -- ??? @ 250 ms
+      g_MAX => 1
+    )
+    port map (
+      clk => clk,
+      rst => rst,
+      ce  => sig_en
+    );
 
     process(clk, reset)
     begin
