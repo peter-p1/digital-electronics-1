@@ -45,10 +45,10 @@ begin
             if count = 0 then
                 tx_reg <= '0'; -- data bit 0
                 count <= count + 1;
-            elsif count < 8 then
+            elsif count < 9 then
                 tx_reg <= data(count - 1);
                 count <= count + 1;
-            elsif count = 8 then
+            elsif count = 9 then
                 tx_reg <= '1'; -- stop bit
                 count <= 0;
             end if;

@@ -1,7 +1,5 @@
-
-
 library ieee;
-  use ieee.std_logic_1164.all;
+use ieee.std_logic_1164.all;
 
 ----------------------------------------------------------
 -- Entity declaration for top level
@@ -9,11 +7,11 @@ library ieee;
 
 entity top is
   port (
-    CLK100MHZ : in    std_logic; --! Main clock
-    SW        : in    std_logic_vector(7 downto 0); --! data values
-    JA        : out   std_logic; --! vysilac 
-    BTNC      : in    std_logic; --! Synchronous reset
-    LED       : out   std_logic_vector(7 downto 0)
+    CLK100MHZ : in    std_logic;  -- Main clock
+    SW        : in    std_logic_vector(7 downto 0);  -- data values
+    JA        : out   std_logic;  -- UART TX output
+    BTNC      : in    std_logic;  -- Synchronous reset
+    LED       : out   std_logic_vector(7 downto 0)  -- LED output
   );
 end entity top;
 
@@ -23,37 +21,32 @@ end entity top;
 
 architecture behavioral of top is
 
-  -- No internal signals are needed today:)
+  signal tx_data : std_logic_vector(7 downto 0);
 
 begin
 
   --------------------------------------------------------
-  -- Instance (copy) of driver_7seg_4digits entity
+  -- Instance (copy) of uart_tx entity
   --------------------------------------------------------
-  driver_seg_4 : entity work.uart_tx
+  uart_tx_inst : entity work.uart_tx
     port map (
       clk      => CLK100MHZ,
       reset    => BTNC,
-      tx       => JA,
-      data(7 downto 0)     => SW(7 downto 0)
-      
-  
-
+      data     => tx_data,
+      tx       => JA
     );
 
+  -- Transmit SW data over UART
+  tx_data <= SW;
 
-    LED(0) <= '1' when (SW(0) = '1') else '0';
-    LED(1) <= '1' when (SW(1) = '1') else '0';
-    LED(2) <= '1' when (SW(2) = '1') else '0';
-    LED(3) <= '1' when (SW(3) = '1') else '0';
-    LED(4) <= '1' when (SW(4) = '1') else '0';
-    LED(5) <= '1' when (SW(5) = '1') else '0';
-    LED(6) <= '1' when (SW(6) = '1') else '0';
-    LED(7) <= '1' when (SW(7) = '1') else '0';
-  --------------------------------------------------------
-  -- Other settings
-  --------------------------------------------------------
-  -- Disconnect the top four digits of the 7-segment display
-  --AN(7 downto 4) <= b"1111";
+  -- Update LED outputs based on SW input
+  LED(0) <= SW(0);
+  LED(1) <= SW(1);
+  LED(2) <= SW(2);
+  LED(3) <= SW(3);
+  LED(4) <= SW(4);
+  LED(5) <= SW(5);
+  LED(6) <= SW(6);
+  LED(7) <= SW(7);
 
 end architecture behavioral;
