@@ -28,15 +28,15 @@ begin
       -- FOR IMPLEMENTATION, CALCULATE VALUE: 250 ms / (1/100 MHz)
       -- 1   @ 10 ns
       -- ??? @ 250 ms
-      g_MAX => 1
+      g_MAX => 10417 -- 100 Mhz on board clock / 9600 Hz
     )
     port map (
       clk => clk,
       rst => rst,
-      ce  => sig_en
+      ce  => sig_en -- outputs clk signal of desired frequency
     );
 
-    process(clk, reset)
+    process(sig_en) -- reacts on signal from clock_en0 entity
     begin
         if reset = '1' then
             count <= 0;
