@@ -25,8 +25,7 @@ entity top is
            LED : out STD_LOGIC_VECTOR (15 downto 15);
            --NEJAKY : out STD_LOGIC; --simulace
            --nevim : out STD_LOGIC_VECTOR (7 downto 0);
-           JA : in STD_LOGIC_VECTOR (0 downto 0);
-           JB : out STD_LOGIC_VECTOR (0 downto 0) -- implementace
+           JB : out STD_LOGIC_VECTOR (0 downto 0) -- vystup
            );
 end top;
 
