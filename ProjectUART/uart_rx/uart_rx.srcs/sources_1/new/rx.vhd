@@ -5,33 +5,24 @@ use ieee.numeric_std.all;
 entity rx is
     Port ( clk      : in STD_LOGIC;
            rst      : in STD_LOGIC;
-           SW       : in STD_LOGIC_VECTOR(2 downto 0);
-           vstup    : in STD_LOGIC;
-           vysledek : out STD_LOGIC_VECTOR(7 downto 0)
+           SW       : in STD_LOGIC;
+           input    : in STD_LOGIC;
+           result : out STD_LOGIC_VECTOR(7 downto 0)
            
            );
 end rx;
 
-architecture behavioral of rx is
-    
-    -- Vnitrni signal pro vysilane slovo
-    signal slovo    : STD_LOGIC_VECTOR(7 downto 0);
-    -- Vnitrni clock enable
-    signal sig_en_rx : std_logic;
-    -- vnitrni 4-bit citac pro multiplexing 8 digits
-    signal sig_cnt_4bit_rx_x16 : std_logic_vector(3 downto 0); -- pro prijimac
-    -- vnitrni propojeni nastaveni rychlosti
-    signal clock_set : natural;      -- zakladni rychlost
-    signal clock_setx16 : natural;   -- 16x rychlejsi
-    -- signal pro zapnuti clock_enable_rx 
-    signal sig_cerx_en : std_logic;
-    -- Interní reset
-    signal sig_rst_cnt : std_logic := '0';
-    signal sig_rx_cnt : std_logic := '0';
-   -- signal vysledek : std_logic_vector(7 downto 0);
-    -- pocitadla pro jednotlive funkce
-    signal pocitadlo : natural;  -- pocitadlo pro prijimac - vyber, kam zapsat prijaty bit
-    signal pocitadlo2 : natural; -- pocitadlo pro prijimac - detekce start bitu
+architecture behavioral of rx is    
+     
+    signal sig_en_rx : std_logic;                              -- Internal clock enable
+    signal sig_cnt_4bit_rx_x16 : std_logic_vector(3 downto 0); -- receiver
+    signal clock_set : natural;                                -- Default speed
+    signal clock_setx16 : natural;                             -- 16x default speed 
+    signal sig_cerx_en : std_logic;                            -- High = receiver is activated, and the process starts detecting incoming bits ;Low = receiver is deactivated.
+    signal sig_rst_cnt : std_logic := '0';                     -- Internal reset
+    signal sig_rx_cnt : std_logic := '0';                      -- Detect the start bit of the received data.
+    signal counter : natural;                                  -- Counter for the receiver
+    signal counterStartBit : natural;                          -- Start bit detection
 begin
 
 clock_setx16 <= clock_set /16;
@@ -41,15 +32,15 @@ clk_en1 : entity work.clock_enable_rx
       clk => clk,
       rst => rst,
       ce  => sig_en_rx,
-      max => clock_setx16, -- rychlost citace je 16x rychlejsi nez nastaveny BD rate
+      max => clock_setx16, -- Receiver speed is 16x faster than the BD rate
       cerx_en => sig_cerx_en
     );
     
 
 bd_rate_set : entity work.bd_rate_set
     port map(
-        clk_out => clock_set, -- nacteni BD rate
-        SW => SW
+        clk_out => clock_set, 
+        SW => SW -- Change the BD rate with a switch
         );
 
     
@@ -69,75 +60,74 @@ bin_cnt_rx_16x : entity work.rx_cnt_up
     
   
 
- rx : process (clk, vstup) is  -- prijimac
+ rx : process (clk, input) is  -- prijimac
   begin
 if(rising_edge(clk))then
-            -- kontrola nastaveni Vysilac/prijmac
-        if(vstup = '0' and sig_rx_cnt = '0') then -- pokud je vstup 0 a jeste sme nedetekovali start bit
-            report "vstup 0";
-            sig_cerx_en <= '1';  -- aktivace citace pro prijimac
-            sig_rx_cnt <= '1';   -- zaznam do pameti, ze jsme detekovali start bit
-        elsif(sig_rx_cnt = '1')then          -- pokud jsme jiz detekovali start bit, tak se divame na hodnotu citace x16 a podle      
+        if(input = '0' and sig_rx_cnt = '0') then -- If the input is 0, we have not detected a start bit yet
+            report "input 0";
+            sig_cerx_en <= '1';  -- Activate the reader for the receiver
+            sig_rx_cnt <= '1';   -- When we detect a start bit, save it 
+        elsif(sig_rx_cnt = '1')then          -- Start bit detected   
              case sig_cnt_4bit_rx_x16 is
                 when "1000" => 
-                    if(pocitadlo2 = 0)then -- vystredeni citace, probiha pouze pri prvnim napocitani 8ky.
-                           pocitadlo2 <= 1;
-                        if(pocitadlo = 0)then -- pokud je pocitadlo rovno nule, zacneme pocitat prijate bity
-                            pocitadlo <= 1;   -- pokud jiz neni rovno nule, tak zaznamenavame bity zpravy
+                    if(counterStartBit = 0)then
+                           counterStartBit <= 1;
+                        if(counter = 0)then -- If the counter is at 0, it will start counting the received bits. If it's not at 0, the bits are recorded.
+                            counter <= 1;  
                         end if;
-                    if(pocitadlo > 0) then -- pokud pocitadlo poradi bitu je vetsi jak 0, tedy je detekovan start bit, tak nacitame vystupy pokazde, kdyz sig_cnt_4bit_rx_x16 je roven "1000"
-                        case pocitadlo is
+                    if(counter > 0) then -- Once the start bit is detected (>0), the 4-bit counter signal (sig_cnt_4bit_rx_x16) starts counting
+                        case counter is
                         when 1 =>
-                            vysledek(7) <= vstup;
-                            pocitadlo <= 2;
-                            report "vysledek 0";
+                            result(7) <= input;
+                            counter <= 2;
+                            report "result 0";
                 
                         when 2 =>
-                            vysledek(6) <= vstup;
-                            pocitadlo <= 3;
-                            report "vysledek 1";
+                            result(6) <= input;
+                            counter <= 3;
+                            report "result 1";
 
                         when 3 => -- d
-                            vysledek(5) <= vstup;
-                            pocitadlo <= 4;
-                            report "vysledek 2";
+                            result(5) <= input;
+                            counter <= 4;
+                            report "result 2";
           
                         when 4 => -- c
-                            vysledek(4) <= vstup;
-                            pocitadlo <= 5;
-                            report "vysledek 3";
+                            result(4) <= input;
+                            counter <= 5;
+                            report "result 3";
           
                         when 5 => -- b
-                            vysledek(3) <= vstup;
-                            pocitadlo <= 6;
-                            report "vysledek 4";
+                            result(3) <= input;
+                            counter <= 6;
+                            report "result 4";
           
                         when 6 => -- a
-                            vysledek(2) <= vstup;
-                            pocitadlo <= 7;
-                            report "vysledek 5";
+                            result(2) <= input;
+                            counter <= 7;
+                            report "result 5";
 
                         when 7 => -- 9
-                            vysledek(1) <= vstup;
-                            pocitadlo <= 8;
-                            report "vysledek 6";
+                            result(1) <= input;
+                            counter <= 8;
+                            report "result 6";
                 
                         when 8 => -- 8
-                            vysledek(0) <= vstup;
-                            pocitadlo <= 9;
-                            report "vysledek 7";
+                            result(0) <= input;
+                            counter <= 9;
+                            report "result 7";
                 
                         when others =>
-                            sig_rx_cnt <= '0';   -- resetovani detekce start bitu
-                            sig_cerx_en  <= '0'; -- deaktivace citace prijmu 
-                            pocitadlo <= 0;
-                        report "vynulovani";
+                            sig_rx_cnt <= '0';   -- Reset start bit detection
+                            sig_cerx_en  <= '0'; -- Deactivate the reader for the receiver
+                            counter <= 0;
+                        report "reset";
                     end case;
                    end if;
                   end if;
                 
                 when "1001" => 
-                    pocitadlo2 <= 0;
+                    counterStartBit <= 0;
                 
                 when others =>
                     -- do nothing;    
