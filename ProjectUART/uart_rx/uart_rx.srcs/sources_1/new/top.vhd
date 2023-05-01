@@ -55,7 +55,7 @@ rx : entity work.rx
         
         SW => SW(15),
         
-        input => JA(0),
+        input => JD(0),
         result => sig_datap
         );
         
