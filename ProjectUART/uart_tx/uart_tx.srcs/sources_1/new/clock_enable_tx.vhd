@@ -9,10 +9,10 @@ library ieee;
 
 entity clock_enable_tx is
   port (
-    clk : in    std_logic; --! Main clock
-    rst : in    std_logic; --! High-active synchronous reset
+    clk : in    std_logic;  --! Main clock
+    rst : in    std_logic;  --! High-active synchronous reset
     ce  : out   std_logic;  --! Clock enable pulse signal
-    max : in natural        -- nastaveni rychlosti
+    max : in natural        -- Speed configuration
   );
 end entity clock_enable_tx;
 

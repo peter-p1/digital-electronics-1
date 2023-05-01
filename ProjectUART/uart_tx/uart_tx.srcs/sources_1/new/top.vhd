@@ -1,14 +1,6 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
--- Uncomment the following library declaration if using
--- arithmetic functions with Signed or Unsigned values
---use IEEE.NUMERIC_STD.ALL;
-
--- Uncomment the following library declaration if instantiating
--- any Xilinx leaf cells in this code.
---library UNISIM;
---use UNISIM.VComponents.all;
 
 entity top is
     Port ( CLK100MHZ : in STD_LOGIC;
@@ -23,9 +15,7 @@ entity top is
            AN : out STD_LOGIC_VECTOR (7 downto 0);
            BTNC : in STD_LOGIC;
            LED : out STD_LOGIC_VECTOR (15 downto 15);
-           --NEJAKY : out STD_LOGIC; --simulace
-           --nevim : out STD_LOGIC_VECTOR (7 downto 0);
-           JB : out STD_LOGIC_VECTOR (0 downto 0) -- vystup
+           JA : out STD_LOGIC_VECTOR (0 downto 0) -- output port
            );
 end top;
 
@@ -43,8 +33,7 @@ begin
       port map (
           clk      => CLK100MHZ,
           rst      => BTNC,
-          
-                
+            
           data0 => SW(0),
           data1 => SW(1),
           data2 => SW(2),
@@ -56,8 +45,6 @@ begin
           
           datap => sig_datap,
                    
-
-          
           seg(6) => CA,
           seg(5) => CB,
           seg(4) => CC,
@@ -66,7 +53,6 @@ begin
           seg(1) => CF,
           seg(0) => CG,
           
-          -- DIGITS
           dig(7 downto 0) => AN(7 downto 0)
       );   
 
@@ -74,7 +60,7 @@ begin
     port map(
         clk => CLK100MHZ,
         rst => BTNC,
---         vystup => NEJAKY, -- simulace
+
         data0 => SW(0),
         data1 => SW(1),
         data2 => SW(2),
@@ -84,10 +70,8 @@ begin
         data6 => SW(6),
         data7 => SW(7),
         
-        SW(2) => SW(13),
-        SW(1) => SW(12),
-        SW(0) => SW(11),
-        vystup => JB(0) -- implementace
+        SW => SW(15),
+        output => JA(0)
         );
 
 end architecture behavioral;

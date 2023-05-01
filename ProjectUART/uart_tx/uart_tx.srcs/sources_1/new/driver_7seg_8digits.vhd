@@ -1,46 +1,17 @@
-----------------------------------------------------------
---
---! @title Driver for 4-digit 7-segment display
---! @author Tomas Fryza
---! Dept. of Radio Electronics, Brno Univ. of Technology, Czechia
---!
---! @copyright (c) 2020 Tomas Fryza
---! This work is licensed under the terms of the MIT license
---
--- Hardware: Nexys A7-50T, xc7a50ticsg324-1L
--- Software: TerosHDL, Vivado 2020.2, EDA Playground
---
-----------------------------------------------------------
-
 library ieee;
   use ieee.std_logic_1164.all;
   use ieee.numeric_std.all;
 
 ----------------------------------------------------------
--- Entity declaration for display driver
---
---             +-------------------+
---        -----|> clk              |
---        -----| rst            dp |-----
---             |          seg(6:0) |--/--
---        --/--| data0(3:0)        |  7
---        --/--| data1(3:0)        |
---        --/--| data2(3:0)        |
---        --/--| data3(3:0)        |
---          4  |           dig(3:0)|--/--
---        --/--| dp_vect(3:0)      |  4
---          4  +-------------------+
---
 -- Inputs:
 --   clk          -- Main clock
 --   rst          -- Synchronous reset
---   dataX(3:0)   -- Data values for individual digits
---   dp_vect(3:0) -- Decimal points for individual digits
+--   dataX        -- Data values for individual digits
+--   datap        -- Select the correct data for each digit
 --
 -- Outputs:
---   dp:          -- Decimal point for specific digit
---   seg(6:0)     -- Cathode values for individual segments
---   dig(3:0)     -- Common anode signals to individual digits
+--   seg          -- Cathode values for individual segments
+--   dig          -- Common anode signals to individual digits
 --
 ----------------------------------------------------------
 
@@ -169,7 +140,6 @@ begin
           when others =>
             sig_hex <= data0;
             dig <= "11111110";
-            -- DEFINE ALL OUTPUTS FOR "00" HERE
 
         end case;
        end if;
