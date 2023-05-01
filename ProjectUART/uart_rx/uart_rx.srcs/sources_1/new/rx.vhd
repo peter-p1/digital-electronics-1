@@ -60,7 +60,7 @@ bin_cnt_rx_16x : entity work.rx_cnt_up
     
   
 
- rx : process (clk, input) is  -- prijimac
+ rx : process (clk, input) is  -- Receiver process
   begin
 if(rising_edge(clk))then
         if(input = '0' and sig_rx_cnt = '0') then -- If the input is 0, we have not detected a start bit yet
