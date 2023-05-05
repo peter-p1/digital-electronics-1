@@ -24,7 +24,7 @@ Přijímač přímá na portu JD(0) přepínač 15 a tlačítko reset zde zastá
 
 ## Software description
 
-###TX:
+### TX:
 
 Data navolená na přepínačích jdou jak do driveru pro zobrazení na displeji tak to samotného vysílače tx, kde jsou pomocí clock_en a čítače postupně odesílány podle pravidel UART. Rychlost odesílání neboli rychlost čítače a clock_en jsou závislé na bautratu který můžeme měnit mezi 2 předem nastavenými hodnotami. tok dat je z tx následně odeslán dále.
 
@@ -32,7 +32,7 @@ Data navolená na přepínačích jdou jak do driveru pro zobrazení na displeji
 
 ![Screenshot_3](https://user-images.githubusercontent.com/124675843/235604029-a33e8a77-291d-4fd4-af66-0bf1092bd1fe.png)
 
-###RX:
+### RX:
 
 Data přijatá z portu se pomocí clock_en a čítače zapíší do vnitřního signálu který dále potuje to zobrazovací metody. Zprávné dekódování a zapsaní hodnot je závislé na bautratu který se může měnit mezi 2 předem nastavenými hodnotami.
 
