@@ -2,9 +2,9 @@
 
 ### Členi týmu
 
+* Peter Pánisz (ja)
 * Eduard Chyba
 * Martin Borka
-* Peter Pánisz
 
 ## Theoretical description and explanation
 
