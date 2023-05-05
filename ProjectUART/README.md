@@ -60,7 +60,7 @@ Přepínač vlevo (SW 15): přepnutí mezi 9600 a 19200 BD
 
 Prostřední tlačítko: reset
 
-## Fotky a video při ovládání:
+# Fotky a video při ovládání:
 https://drive.google.com/drive/u/0/folders/1ZnK623iUQfYHucdSUApsKEXAbp9egKUu
 
 ## References
