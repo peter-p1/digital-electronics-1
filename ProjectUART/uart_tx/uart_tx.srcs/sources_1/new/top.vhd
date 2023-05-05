@@ -14,7 +14,6 @@ entity top is
            CG : out STD_LOGIC;
            AN : out STD_LOGIC_VECTOR (7 downto 0);
            BTNC : in STD_LOGIC;
-           LED : out STD_LOGIC_VECTOR (15 downto 15);
            JA : out STD_LOGIC_VECTOR (0 downto 0) -- output port
            );
 end top;

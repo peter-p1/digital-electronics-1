@@ -25,11 +25,9 @@ architecture behavioral of tx is
     signal sig_en_tx : std_logic;                           -- Internal clock enable
     signal sig_cnt_4bit_tx : std_logic_vector(3 downto 0);  -- pro vysilac
     signal clock_set : natural;                             -- Default speed
-    signal clock_setx16 : natural;                          -- 16x default speed
   --signal sig_rst_cnt : std_logic := '0';                  -- Detect the start bit of the received data.
 begin
 
-clock_setx16 <= clock_set /16;
 
     
 clk_en2 : entity work.clock_enable_tx
