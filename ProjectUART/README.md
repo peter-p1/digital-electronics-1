@@ -50,7 +50,7 @@ Data přijatá z portu se pomocí clock_en a čítače zapíší do vnitřního 
 </p>
 
 ## Ovládání
-Naše UART jsou 2 ruzné programy: RX a TX (přijímač a vysílač).
+Naše UART jsou 2 ruzné programy: **RX** a **TX** (přijímač a vysílač).
 
 ### TX:
 
