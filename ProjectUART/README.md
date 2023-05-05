@@ -1,12 +1,12 @@
 # VHDL projekt - UART
 
-### Členi týmu
+### Členové týmu
 
 * Peter Pánisz (ja)
 * Eduard Chyba
 * Martin Borka
 
-## Theoretical description and explanation
+## Teoretický popis a vysvětlení
 
 UART (z anglického Universal asynchronous receiver-transmitter) je sběrnice, která slouží k asynchronnímu sériovému přenosu dat. Skládá se ze dvou částí: Vysílač a přijímač.
 
@@ -27,7 +27,7 @@ V případu vysílače slouží 8 přepínačů v pravo (SW 0-7) pro nastavení 
 
 Přijímač přímá na portu JD(0) přepínač nalevo (SW 15) a tlačítko reset zde zastávají stejnou funkci. U obou dvou programech se vysílaná či příjmaná 8 bitová zpráva ukázuje na osmi sedmi segmentových displejích.
 
-## Software description
+## Software
 
 ### TX:
 
@@ -73,6 +73,7 @@ Prostřední tlačítko: reset
 ### Fotky a video při ovládání:
 https://drive.google.com/drive/u/0/folders/1ZnK623iUQfYHucdSUApsKEXAbp9egKUu
 
-## References
+## Reference
 
 1. https://cs.wikipedia.org/wiki/UART
+2. https://nandland.com/uart-serial-port-module/
