@@ -14,6 +14,8 @@ Popis přenosu:
 
 Vysílač kontinuálně vysílá hodnoty nastavené na páčkách. Na začátku přenosu je start bit reprezentován logickou 0, pak 8 datových bitů a nakonec stop bit reprezentován logickou 1. Zbývající odeslané byty jsou výplň reprezentována logickou 1. Tyto bity nejsou potřebné pro správnou funkčnost, ale my je odesíláme pro jednodušší ladění na osciloskopu.
 
+![UART](8n1.png)
+
 ## Hardware
 
 V tomto projektu využíváme desku A7-50T od firmy Nexys. Tato deska nabízí mnoho možných vstupů a výstupů. V našem případě používáme přepínače a jedno tlačítko, pro nastavení zařízení.
@@ -59,8 +61,6 @@ Přijmací port je JD(0) a přijaté byty se zobrazí na displejích
 Přepínač vlevo (SW 15): přepnutí mezi 9600 a 19200 BD
 
 Prostřední tlačítko: reset
-
-![Obrázek](8n1.png)
 
 ### Fotky a video při ovládání:
 https://drive.google.com/drive/u/0/folders/1ZnK623iUQfYHucdSUApsKEXAbp9egKUu
