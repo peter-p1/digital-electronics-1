@@ -42,7 +42,7 @@ Data přijatá z portu se pomocí clock_en a čítače zapíší do vnitřního 
 ## Ovládání
 naše UART jsou 2 ruzné programy rx a tx.
 
-TX:
+### TX:
 
 8 Přepínačů na pravo (SW 0-7): nastavování hodnot odesílaných bitů 8, které se zobrazí na displejích
 
@@ -52,7 +52,7 @@ Prostřední tlačítko: reset
 
 Zpráva se vysílá portem JA(0)
 
-RX:
+### RX:
 
 Přijmací port je JD(0) a přijaté byty se zobrazí na displejích
 
@@ -60,7 +60,7 @@ Přepínač vlevo (SW 15): přepnutí mezi 9600 a 19200 BD
 
 Prostřední tlačítko: reset
 
-Fotky a video při ovládání
+## Fotky a video při ovládání:
 https://drive.google.com/drive/u/0/folders/1ZnK623iUQfYHucdSUApsKEXAbp9egKUu
 
 ## References
