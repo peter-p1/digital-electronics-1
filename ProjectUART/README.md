@@ -14,7 +14,10 @@ Popis přenosu:
 
 Vysílač kontinuálně vysílá hodnoty nastavené na páčkách. Na začátku přenosu je start bit reprezentován logickou 0, pak 8 datových bitů a nakonec stop bit reprezentován logickou 1. Zbývající odeslané byty jsou výplň reprezentována logickou 1. Tyto bity nejsou potřebné pro správnou funkčnost, ale my je odesíláme pro jednodušší ladění na osciloskopu.
 
-![UART](8n1.png)
+<p align="center">
+  <img src="8n1.png" />
+</p>
+
 
 ## Hardware
 
