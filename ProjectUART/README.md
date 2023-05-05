@@ -8,25 +8,25 @@
 
 ## Theoretical description and explanation
 
-UART (z anglického Universal asynchronous receiver-transmitter) je sběrnice, která slouží k asynchronnímu sériovému přenosu dat.
+UART (z anglického Universal asynchronous receiver-transmitter) je sběrnice, která slouží k asynchronnímu sériovému přenosu dat. Skládá se ze dvou částí: Vysílač a přijímač.
 
-Popis přenosu
+Popis přenosu:
 
-Když vysílač nevysílá tak je vysílaný signál nastaven na logickou hodnotu 1, při vysílaní se nejdříve pošle start bit reprezentovám logickou 0 a pak jáslebují bity přenášených dat. Může následovat paritní bit který je volitelný, a nakonec stop bit reprezentován logickou 1.
+Vysílač kontinuálně vysílá hodnoty nastavené na páčkách. Na začátku přenosu je start bit reprezentován logickou 0, pak 8 datových bitů a nakonec stop bit reprezentován logickou 1. Zbývající odeslané byty jsou výplň reprezentována logickou 1. Tyto bity nejsou potřebné pro správnou funkčnost, ale my je odesíláme pro jednodušší ladění na osciloskopu.
 
 ## Hardware
 
-V tomto projektu využíváme desku nexys a7-50t od firmy Nexys. Tato deska nabízí mnoho možných vstupů a výstupů. V našem případě používáme přepínače a jedno tlačítko, pro nastavení zařízení.
+V tomto projektu využíváme desku A7-50T od firmy Nexys. Tato deska nabízí mnoho možných vstupů a výstupů. V našem případě používáme přepínače a jedno tlačítko, pro nastavení zařízení.
 
-V případu vysílače slouží 8 přepínačů v pravo (SW 0-7) pro nastavení 8 bitů které budeme odesílat přez port JA(0). Poté je tu ještě přepínač nalevo (SW 15) díky kterému mužeme nastavovat rychlost přenosu neboli bautrate. Poslední ovládací prvek je prostřední tlačítko, které zastává funkci reset (vyresetuje vnitřní program pokud by bylo potřeba).
+V případu vysílače slouží 8 přepínačů v pravo (SW 0-7) pro nastavení 8 bitů které budeme odesílat přez port JA(0). Poté je tu ještě přepínač nalevo (SW 15) díky kterému mužeme nastavovat rychlost přenosu neboli baud rate. Poslední ovládací prvek je prostřední tlačítko, které zastává funkci reset (vyresetuje vnitřní program pokud by bylo potřeba).
 
-Přijímač přímá na portu JD(0) přepínač 15 a tlačítko reset zde zastávají stejnou funkci. U obou dvou programech se vysílaná či příjmaná 8 bitová zpráva ukázuje na osmi sedmi segmentových displejích.
+Přijímač přímá na portu JD(0) přepínač nalevo (SW 15) a tlačítko reset zde zastávají stejnou funkci. U obou dvou programech se vysílaná či příjmaná 8 bitová zpráva ukázuje na osmi sedmi segmentových displejích.
 
 ## Software description
 
 ### TX:
 
-Data navolená na přepínačích jdou jak do driveru pro zobrazení na displeji tak to samotného vysílače tx, kde jsou pomocí clock_en a čítače postupně odesílány podle pravidel UART. Rychlost odesílání neboli rychlost čítače a clock_en jsou závislé na bautratu který můžeme měnit mezi 2 předem nastavenými hodnotami. tok dat je z tx následně odeslán dále.
+Data navolená na přepínačích jdou jak do driveru pro zobrazení na displeji tak to samotného vysílače tx, kde jsou pomocí clock_en a čítače postupně odesílány podle pravidel UART. Rychlost odesílání neboli rychlost čítače a clock_en jsou závislé na baud rate který můžeme měnit mezi 2 předem nastavenými hodnotami. Tok dat je z tx následně odeslán dále přes port.
 
 ![Screenshot_2](https://user-images.githubusercontent.com/124675843/235603958-2d143e35-bda2-410f-bf94-b7b2e43c558b.png)
 
@@ -34,13 +34,13 @@ Data navolená na přepínačích jdou jak do driveru pro zobrazení na displeji
 
 ### RX:
 
-Data přijatá z portu se pomocí clock_en a čítače zapíší do vnitřního signálu který dále potuje to zobrazovací metody. Zprávné dekódování a zapsaní hodnot je závislé na bautratu který se může měnit mezi 2 předem nastavenými hodnotami.
+Data přijatá z portu se pomocí clock_en a čítače zapíší do vnitřního signálu který dále potuje to zobrazovací metody. Zprávné dekódování a zapsaní hodnot je závislé na baud rate který se může měnit mezi 2 předem nastavenými hodnotami.
 
 ![Screenshot_4](https://user-images.githubusercontent.com/124675843/235610020-72f0992c-9d3c-44c9-afda-89ca4fcbbedc.png)
 
 
 ## Ovládání
-naše UART jsou 2 ruzné programy rx a tx.
+Naše UART jsou 2 ruzné programy: RX a TX (přijímač a vysílač).
 
 ### TX:
 
