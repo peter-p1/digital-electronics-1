@@ -52,7 +52,7 @@ Prostřední tlačítko: reset
 
 Zpráva se vysílá portem JA(0)
 
-TX:
+RX:
 
 Přijmací port je JD(0) a přijaté byty se zobrazí na displejích
 
